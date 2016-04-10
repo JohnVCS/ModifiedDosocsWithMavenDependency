@@ -311,11 +311,11 @@ def main(sysargv=None):
                     'comment': new_doc_comment,
                     'prefix': config.config['namespace_prefix']
                     }
-                doc_id = spdxdb.create_document(conn, package=package, **kwargs)['document_id']
+                artifact_doc_id = spdxdb.create_document(conn, package=package, **kwargs)['document_id']
             fmt = '{}: document_id: {}\n'
-            sys.stderr.write(fmt.format(artifact , doc_id))
+            sys.stderr.write(fmt.format(artifact , artifact_doc_id))
         with engine.begin() as conn:
-            print(render.render_document(conn, doc_id, template_file))
+            print(render.render_document(conn, artifact_doc_id, template_file))
             
         #create folder and add  depedencencies
         mavenDepUtil.getDepAndGenDocsForDeps()
@@ -357,7 +357,7 @@ def main(sysargv=None):
                 fmt = '{}: document_id: {}\n'
                 sys.stderr.write(fmt.format(package_path, doc_id))
             with engine.begin() as conn:
-                spdxdb.create_extern_document_reference(conn, doc_id,doc['document_namespace_id'],package['sha1'])
+                spdxdb.create_extern_document_reference(conn, artifact_doc_id,doc['document_namespace_id'],package['sha1'])
                 print(render.render_document(conn, doc_id, template_file))
             #.call(...) is for blocking
 
