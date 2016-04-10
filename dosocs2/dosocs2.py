@@ -26,7 +26,7 @@
 {0} newconfig [-f FILE]
 {0} oneshot [-c COMMENT] [-C COMMENT] [-e VER] [-f FILE] [-n NAME] [-N NAME]
     [-r] [-s SCANNERS] [-T FILE] (PATH)
-{0} nameToIdentifier 
+{0} mavenDepGen 
 {0} print [-f FILE] [-T FILE] (DOC-ID)
 {0} scan [-c COMMENT] [-f FILE] [-n NAME] [-e VER] [-s SCANNERS] [-r] (PATH)
 {0} scanproject [--project-file] (PROJECT-FILE)
@@ -275,7 +275,11 @@ def main(sysargv=None):
                 errmsg('document id {} not found in the database.'.format(doc_id))
                 return 1
             print(render.render_document(conn, doc_id, template_file))
-    elif argv['nameToIdentifier']:
+    # generates maven dependency
+    elif argv['mavenDepGen']:
+	import mavenDepUtil
+	mavenDepUtil.createGraphMl()
+	mavenDepUtil.getDepAndGenDocsForDeps()
         with engine.begin() as conn:
             spdxdb.persistDependencyHierarchy(conn)
 #         import queries
