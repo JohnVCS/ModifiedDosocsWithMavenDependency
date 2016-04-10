@@ -245,8 +245,11 @@ def persistDependencyHierarchy(conn):
         print 'will persist'
         print left_package_name,right_package_name
         print kwargs
-        row_params.append(kwargs)
-    bulk_insert(conn, db.relationships, row_params)
+        #row_params.append(kwargs)
+    	try:
+		insert(conn, db.relationships, kwargs)
+	except:
+		pass
 
 def create_document(conn, prefix, package, name=None, comment=None):
     data_license_query = (
