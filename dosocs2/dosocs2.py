@@ -280,11 +280,90 @@ def main(sysargv=None):
     # generates maven dependency
     elif argv['mavenDepGen']:
         import mavenDepUtil
-        mavenDepUtil.createDocumentForArtifact(artifact)
-        mavenDepUtil.createGraphMl()
-        mavenDepUtil.getDepAndGenDocsForDeps()
+#         mavenDepUtil.createDocumentForArtifact(artifact)
+        #oneshot artifact
+        kwargs = {
+            'config': config.config,
+            'engine': engine,
+            'selected_scanners': selected_scanners,
+            'package_name': argv['--package-name'],
+            'package_version': argv['--package-version'],
+            'package_comment': argv['--package-comment'],
+            'rescan': argv['--rescan']
+            }
+        if os.path.isfile(artifact):
+            with util.tempextract(artifact) as (tempdir, _):
+                kwargs['package_root'] = tempdir
+                kwargs['package_file_path'] = artifact 
+                package = do_scan(**kwargs)
+        else:
+            os.stat(artifact)  # force exception if nonexisstent
+            kwargs['package_root'] = artifact 
+            kwargs['package_file_path'] = None
+            package = do_scan(**kwargs)
         with engine.begin() as conn:
-            spdxdb.persistDependencyHierarchy(conn)
+            document = spdxdb.get_doc_by_package_id(conn, package_id)
+            if document:
+                doc_id = document['document_id']
+            else:
+                kwargs = {
+                    'name': new_doc_name,
+                    'comment': new_doc_comment,
+                    'prefix': config.config['namespace_prefix']
+                    }
+                doc_id = spdxdb.create_document(conn, package=package, **kwargs)['document_id']
+            fmt = '{}: document_id: {}\n'
+            sys.stderr.write(fmt.format(artifact , doc_id))
+        with engine.begin() as conn:
+            print(render.render_document(conn, doc_id, template_file))
+            
+        #create folder and add  depedencencies
+        mavenDepUtil.getDepAndGenDocsForDeps()
+
+        #traverse depedencencies and generate documents
+        for filename in os.listdir('mydep'):
+            package_path="mydep/"+filename
+            kwargs = {
+                'config': config.config,
+                'engine': engine,
+                'selected_scanners': selected_scanners,
+                'package_name': argv['--package-name'],
+                'package_version': argv['--package-version'],
+                'package_comment': argv['--package-comment'],
+                'rescan': argv['--rescan']
+                }
+            if os.path.isfile(package_path):
+                with util.tempextract(package_path) as (tempdir, _):
+                    kwargs['package_root'] = tempdir
+                    kwargs['package_file_path'] = package_path
+                    package = do_scan(**kwargs)
+            else:
+                os.stat(package_path)  # force exception if nonexisstent
+                kwargs['package_root'] = package_path
+                kwargs['package_file_path'] = None
+                package = do_scan(**kwargs)
+            with engine.begin() as conn:
+                document = spdxdb.get_doc_by_package_id(conn, package_id)
+                if document:
+                    doc_id = document['document_id']
+                else:
+                    kwargs = {
+                        'name': new_doc_name,
+                        'comment': new_doc_comment,
+                        'prefix': config.config['namespace_prefix']
+                        }
+                    doc = spdxdb.create_document(conn, package=package, **kwargs)
+                    doc_id=doc['document_id']
+                fmt = '{}: document_id: {}\n'
+                sys.stderr.write(fmt.format(package_path, doc_id))
+            with engine.begin() as conn:
+                spdxdb.create_extern_document_reference(conn, doc_id,doc['document_namespace_id'],package['sha1'])
+                print(render.render_document(conn, doc_id, template_file))
+            #.call(...) is for blocking
+
+#         mavenDepUtil.createGraphMl()
+#         with engine.begin() as conn:
+#             spdxdb.persistDependencyHierarchy(conn)
 #         import queries
 #         with engine.begin() as conn:
 #             print(render.get_row(conn,queries.getPackageIdentifierByName("openssl-1.0.1r.tar.gz"))['left_identifier_id'])

@@ -74,12 +74,15 @@ def createDocumentsForDepedencies():
 		dosocsOneshotCommand = ["dosocs2", "oneshot","mydep/"+filename]
 		#.call(...) is for blocking
 		dosocsOneshotProcess = subprocess.call(dosocsOneshotCommand)#, stdout=devnull)
+# 		getlastLine=subprocess.Popen(["sed" ,"1,4d"], stdin=nomosProcess.stdout,stdout=subprocess.PIPE)
+#         end_of_pipe=deleteFirst4LinesProcess.stdout
+# 		return end_of_pipe 
 
 
 def getDepAndGenDocsForDeps():
 	createTempDirectoryIfDoesntExist()
 	copyDependencyToTempFolder()
-	createDocumentsForDepedencies()
+# 	createDocumentsForDepedencies()
 
 
 # main method

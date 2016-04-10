@@ -251,6 +251,15 @@ def persistDependencyHierarchy(conn):
         except:
             pass
 
+def create_extern_document_reference(conn, document_id,document_namespace_id,sha1):
+    external_ref_params = {
+        'document_id': document_id,
+        'document_namespace_id': document_namespace_id,
+        'id_string': 'spdxref-extern_document_ref-fordep-'+sha1,
+        'sha1': sha1 
+        }
+    insert(conn, db.external_refs, external_ref_params)
+
 def create_document(conn, prefix, package, name=None, comment=None):
     data_license_query = (
         select([db.licenses.c.license_id])
