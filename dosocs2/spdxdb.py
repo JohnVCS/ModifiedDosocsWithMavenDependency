@@ -206,6 +206,46 @@ def autocreate_relationships(conn, docid):
             row_params.append(kwargs)
         bulk_insert(conn, db.relationships, row_params)
 
+def persistDependencyHierarchy(conn):
+    edges=[('org.hibernate:hibernate-core:jar:4.3.7.Final:compile', 'antlr:antlr:jar:2.7.7:compile'), ('org.hibernate:hibernate-core:jar:4.3.7.Final:compile', 'org.jboss:jandex:jar:1.1.0.Final:compile'), ('org.hibernate:hibernate-entitymanager:jar:4.3.7.Final:compile', 'org.jboss.logging:jboss-logging-annotations:jar:1.2.0.Beta1:compile'), ('org.hibernate:hibernate-entitymanager:jar:4.3.7.Final:compile', 'org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:jar:1.0.0.Final:compile'), ('org.hibernate:hibernate-entitymanager:jar:4.3.7.Final:compile', 'org.hibernate:hibernate-core:jar:4.3.7.Final:compile'), ('org.hibernate:hibernate-entitymanager:jar:4.3.7.Final:compile', 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:jar:1.0.0.Final:compile'), ('org.hibernate:hibernate-entitymanager:jar:4.3.7.Final:compile', 'org.jboss.logging:jboss-logging:jar:3.1.3.GA:compile'), ('org.hibernate:hibernate-entitymanager:jar:4.3.7.Final:compile', 'org.hibernate.common:hibernate-commons-annotations:jar:4.0.5.Final:compile'), ('org.hibernate:hibernate-entitymanager:jar:4.3.7.Final:compile', 'dom4j:dom4j:jar:1.6.1:compile'), ('org.springframework.data:spring-data-mongodb:jar:1.6.1.RELEASE:compile', 'org.mongodb:mongo-java-driver:jar:2.12.4:compile'), ('org.codehaus.jackson:jackson-mapper-asl:jar:1.9.13:compile', 'org.codehaus.jackson:jackson-core-asl:jar:1.9.13:compile'), ('dom4j:dom4j:jar:1.6.1:compile', 'xml-apis:xml-apis:jar:1.0.b2:compile'), ('com.zaxxer:HikariCP:jar:2.2.5:compile', 'org.javassist:javassist:jar:3.18.1-GA:compile'), ('org.hibernate:hibernate-validator:jar:5.1.3.Final:compile', 'javax.validation:validation-api:jar:1.1.0.Final:compile'), ('org.hibernate:hibernate-validator:jar:5.1.3.Final:compile', 'com.fasterxml:classmate:jar:1.0.0:compile'), ('org.springframework.data:spring-data-jpa:jar:1.7.1.RELEASE:compile', 'org.slf4j:jcl-over-slf4j:jar:1.7.8:runtime'), ('org.springframework.data:spring-data-jpa:jar:1.7.1.RELEASE:compile', 'org.aspectj:aspectjrt:jar:1.8.4:compile'), ('org.springframework.data:spring-data-jpa:jar:1.7.1.RELEASE:compile', 'org.springframework.data:spring-data-commons:jar:1.9.1.RELEASE:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.hamcrest:hamcrest-library:jar:1.3:test'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.springframework.data:spring-data-mongodb:jar:1.6.1.RELEASE:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.codehaus.jackson:jackson-mapper-asl:jar:1.9.13:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.springframework.security:spring-security-web:jar:3.2.5.RELEASE:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'com.google.guava:guava:jar:17.0:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.slf4j:slf4j-api:jar:1.7.8:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.thymeleaf.extras:thymeleaf-extras-springsecurity3:jar:2.1.1.RELEASE:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.hibernate:hibernate-entitymanager:jar:4.3.7.Final:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'javax.el:javax.el-api:jar:2.2.5:test'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'com.zaxxer:HikariCP:jar:2.2.5:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.hibernate:hibernate-validator:jar:5.1.3.Final:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.hsqldb:hsqldb:jar:2.3.2:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.springframework.data:spring-data-jpa:jar:1.7.1.RELEASE:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.springframework:spring-test:jar:4.1.4.RELEASE:test'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'ch.qos.logback:logback-classic:jar:1.1.2:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.springframework:spring-orm:jar:4.1.4.RELEASE:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'javax.inject:javax.inject:jar:1:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.assertj:assertj-core:jar:1.5.0:test'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.mockito:mockito-core:jar:1.10.8:test'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.springframework:spring-webmvc:jar:4.1.4.RELEASE:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.springframework.security:spring-security-config:jar:3.2.5.RELEASE:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'javax.servlet:javax.servlet-api:jar:3.0.1:provided'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.objenesis:objenesis:jar:2.1:test'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.thymeleaf:thymeleaf-spring4:jar:2.1.4.RELEASE:compile'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'junit:junit:jar:4.11:test'), ('com.springMvcMongodb:SpringMVCmongoDBTest:war:0.0.1-SNAPSHOT', 'org.hamcrest:hamcrest-core:jar:1.3:test'), ('org.thymeleaf:thymeleaf:jar:2.1.4.RELEASE:compile', 'org.unbescape:unbescape:jar:1.1.0.RELEASE:compile'), ('org.thymeleaf:thymeleaf:jar:2.1.4.RELEASE:compile', 'ognl:ognl:jar:3.0.8:compile'), ('ch.qos.logback:logback-classic:jar:1.1.2:compile', 'ch.qos.logback:logback-core:jar:1.1.2:compile'), ('org.springframework:spring-orm:jar:4.1.4.RELEASE:compile', 'org.springframework:spring-tx:jar:4.1.4.RELEASE:compile'), ('org.springframework:spring-orm:jar:4.1.4.RELEASE:compile', 'org.springframework:spring-jdbc:jar:4.1.4.RELEASE:compile'), ('org.springframework:spring-webmvc:jar:4.1.4.RELEASE:compile', 'org.springframework:spring-beans:jar:4.1.4.RELEASE:compile'), ('org.springframework:spring-webmvc:jar:4.1.4.RELEASE:compile', 'org.springframework:spring-core:jar:4.1.4.RELEASE:compile'), ('org.springframework:spring-webmvc:jar:4.1.4.RELEASE:compile', 'org.springframework:spring-context:jar:4.1.4.RELEASE:compile'), ('org.springframework:spring-webmvc:jar:4.1.4.RELEASE:compile', 'org.springframework:spring-web:jar:4.1.4.RELEASE:compile'), ('org.springframework:spring-webmvc:jar:4.1.4.RELEASE:compile', 'org.springframework:spring-expression:jar:4.1.4.RELEASE:compile'), ('org.springframework.security:spring-security-config:jar:3.2.5.RELEASE:compile', 'aopalliance:aopalliance:jar:1.0:compile'), ('org.springframework.security:spring-security-config:jar:3.2.5.RELEASE:compile', 'org.springframework:spring-aop:jar:4.1.4.RELEASE:compile'), ('org.springframework.security:spring-security-config:jar:3.2.5.RELEASE:compile', 'org.springframework.security:spring-security-core:jar:3.2.5.RELEASE:compile'), ('org.thymeleaf:thymeleaf-spring4:jar:2.1.4.RELEASE:compile', 'org.thymeleaf:thymeleaf:jar:2.1.4.RELEASE:compile')]
+    row_params=[]
+#         print(render.get_row(conn,queries.getPackageIdentifierByName("openssl-1.0.1r.tar.gz"))['left_identifier_id'])
+    for edge in edges:
+        (leftnode,rightnode)=edge
+        splitLeftNodeName=leftnode.split(':')
+        left_package_name=splitLeftNodeName[1]+'-'+splitLeftNodeName[3]+'-sources.jar'
+        splitRightNodeName=rightnode.split(':')
+        right_package_name=splitRightNodeName[1]+'-'+splitRightNodeName[3]+'-sources.jar'
+#         print left_package_name
+#         print right_package_name
+        try:
+            leftIdent=conn.execute(queries.getPackageIdentifierByName(left_package_name)).fetchone()
+#             leftIdent=render.get_row(conn,queries.getPackageIdentifierByName(left_package_name))['left_identifier_id']
+#             print 'left package name succeded'
+#             print queries.getPackageIdentifierByName(right_package_name)
+            rightIdent=conn.execute(queries.getPackageIdentifierByName(right_package_name)).fetchone()
+            if leftIdent==None or rightIdent==None:
+                print leftIdent,rightIdent
+                print left_package_name,right_package_name
+                print 'either the left or right identifier does not exist'
+                continue
+#             rightIdent=render.get_row(conn,queries.getPackageIdentifierByName(right_package_name))['left_identifier_id']
+            print leftIdent,rightIdent
+        except ValueError:
+            print 'falure get identifier for the following edge'
+            print left_package_name, right_package_name 
+            continue
+        kwargs = {
+            'left_identifier_id': leftIdent[0],
+            'relationship_type_id': 29,
+            'right_identifier_id': rightIdent[0],
+            'relationship_comment': ''
+            }
+        print 'will persist'
+        print left_package_name,right_package_name
+        print kwargs
+        row_params.append(kwargs)
+    bulk_insert(conn, db.relationships, row_params)
 
 def create_document(conn, prefix, package, name=None, comment=None):
     data_license_query = (
@@ -238,7 +278,7 @@ def create_document(conn, prefix, package, name=None, comment=None):
     document_identifier_params = {
         'document_namespace_id': doc_namespace_id,
         'document_id': new_document_id,
-        'id_string': 'SPDXRef-DOCUMENT'
+        'id_string': 'spdxref-document'
         }
     # create all identifiers
     insert(conn, db.identifiers, document_identifier_params)
@@ -246,6 +286,8 @@ def create_document(conn, prefix, package, name=None, comment=None):
     # TODO: create known relationships
     autocreate_relationships(conn, new_document_id)
     return new_document
+
+    
 
 
 def fetch(conn, table, pkey):
