@@ -26,7 +26,7 @@
 {0} newconfig [-f FILE]
 {0} oneshot [-c COMMENT] [-C COMMENT] [-e VER] [-f FILE] [-n NAME] [-N NAME]
     [-r] [-s SCANNERS] [-T FILE] (PATH)
-{0} mavenDepGen 
+{0} mavenDepGen [-a ARTIFACT] 
 {0} print [-f FILE] [-T FILE] (DOC-ID)
 {0} scan [-c COMMENT] [-f FILE] [-n NAME] [-e VER] [-s SCANNERS] [-r] (PATH)
 {0} scanproject [--project-file] (PROJECT-FILE)
@@ -69,6 +69,7 @@ Options:
   -T, --template-file=FILE    Template to use for document generation
   --no-confirm                Don't prompt when dropping/creating tables
                                 (dangerous!)
+  -a --artifact=ARTIFACT                          artifactname 
 
 Report bugs to <skorlimarla@unomaha.edu>.
 '''
@@ -195,6 +196,7 @@ def main(sysargv=None):
     new_doc_name = argv['--doc-name'] or argv['--package-name']
     template_file = argv['--template-file'] or format_map['tag']
     project_file = argv['PROJECT-FILE'] or ''
+    artifact = argv['--artifact']
 
     # Configuration and scanner discovery
     config = configtools.Config()
@@ -277,9 +279,12 @@ def main(sysargv=None):
             print(render.render_document(conn, doc_id, template_file))
     # generates maven dependency
     elif argv['mavenDepGen']:
-	import mavenDepUtil
-	mavenDepUtil.createGraphMl()
-	mavenDepUtil.getDepAndGenDocsForDeps()
+        print(artifact)
+        import pdb;pdb.set_trace()
+        import mavenDepUtil
+#         print artifact
+        mavenDepUtil.createGraphMl()
+        mavenDepUtil.getDepAndGenDocsForDeps()
         with engine.begin() as conn:
             spdxdb.persistDependencyHierarchy(conn)
 #         import queries
