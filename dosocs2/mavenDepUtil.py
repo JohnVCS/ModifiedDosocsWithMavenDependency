@@ -64,6 +64,11 @@ def parseGraphMl():
 		edgeLabels.append((nodesDict[e1]['label'],nodesDict[e2]['label']))
 	return edgeLabels
 
+def createDocumentForArtifact(artifact):
+	dosocsOneshotCommand = ["dosocs2", "oneshot",artifact]
+	#.call(...) is for blocking
+	dosocsOneshotProcess = subprocess.call(dosocsOneshotCommand)#, stdout=devnull)
+
 def createDocumentsForDepedencies():
 	for filename in os.listdir('mydep'):
 		dosocsOneshotCommand = ["dosocs2", "oneshot","mydep/"+filename]

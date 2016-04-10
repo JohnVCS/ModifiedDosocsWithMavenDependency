@@ -279,10 +279,8 @@ def main(sysargv=None):
             print(render.render_document(conn, doc_id, template_file))
     # generates maven dependency
     elif argv['mavenDepGen']:
-        print(artifact)
-        import pdb;pdb.set_trace()
         import mavenDepUtil
-#         print artifact
+        mavenDepUtil.createDocumentForArtifact(artifact)
         mavenDepUtil.createGraphMl()
         mavenDepUtil.getDepAndGenDocsForDeps()
         with engine.begin() as conn:
