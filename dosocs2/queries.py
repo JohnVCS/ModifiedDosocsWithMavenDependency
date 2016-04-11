@@ -344,6 +344,40 @@ def packages_all_licenses_in_files(package_id):
     )
 
 
+def depedendency_relationships(left_namespace_id, left_id_string):
+    rel = db.relationships.alias()
+    rty = db.relationship_types.alias()
+    ide1 = db.identifiers.alias()
+    ide2 = db.identifiers.alias()
+    doc1 = db.documents.alias()
+    doc2 = db.documents.alias()
+    return (select([
+        rel.c.relationship_id,
+        ide1.c.id_string              .label('left_id_string'),
+        rty.c.name                    .label('type'),
+        ide2.c.id_string              .label('right_id_string'),
+        doc1.c.document_id            .label('left_document_id'),
+        doc2.c.document_id            .label('right_document_id'),
+        doc1.c.document_namespace_id  .label('left_document_namespace_id'),
+        doc2.c.document_namespace_id  .label('right_document_namespace_id'),
+        rel.c.relationship_comment    .label('comment')
+        ])
+    .select_from(
+        rel
+        .join(rty, rel.c.relationship_type_id == rty.c.relationship_type_id)
+        .join(ide1, rel.c.left_identifier_id == ide1.c.identifier_id)
+        .join(ide2, rel.c.right_identifier_id == ide2.c.identifier_id)
+        .join(doc1, ide1.c.document_namespace_id == doc1.c.document_namespace_id)
+        .join(doc2, ide2.c.document_namespace_id == doc2.c.document_namespace_id)
+    )
+    .where(
+        and_(
+            doc1.c.document_namespace_id == left_namespace_id,
+            ide1.c.id_string == left_id_string,
+            rty.c.name=='HAS_PREREQUISITE'
+            )
+        )
+    )
 def relationships(left_namespace_id, left_id_string):
     rel = db.relationships.alias()
     rty = db.relationship_types.alias()
