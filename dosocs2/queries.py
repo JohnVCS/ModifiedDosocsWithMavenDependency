@@ -344,6 +344,23 @@ def packages_all_licenses_in_files(package_id):
     )
 
 
+def doc_ids_of_external_doc_refs(artifact_doc_id):
+    doc=db.documents.alias()
+    ef=db.external_refs.alias()
+    return (select([
+        doc.c.document_id            .label('document_id'),
+        ])
+    .select_from(
+        ef
+        .join(doc, ef.c.document_namespace_id == doc.c.document_namespace_id)
+    )
+    .where(
+        and_(
+            ef.c.document_id == artifact_doc_id,
+            )
+        )
+    )
+
 def depedendency_relationships(left_namespace_id, left_id_string):
     rel = db.relationships.alias()
     rty = db.relationship_types.alias()
@@ -407,7 +424,8 @@ def relationships(left_namespace_id, left_id_string):
     .where(
         and_(
             doc1.c.document_namespace_id == left_namespace_id,
-            ide1.c.id_string == left_id_string
+            ide1.c.id_string == left_id_string,
+            rty.c.name!='HAS_PREREQUISITE'
             )
         )
     )

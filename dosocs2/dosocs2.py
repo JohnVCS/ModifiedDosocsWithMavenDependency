@@ -314,8 +314,8 @@ def main(sysargv=None):
                 artifact_doc_id = spdxdb.create_document(conn, package=package, **kwargs)['document_id']
             fmt = '{}: document_id: {}\n'
             sys.stderr.write(fmt.format(artifact , artifact_doc_id))
-        with engine.begin() as conn:
-            print(render.render_document(conn, artifact_doc_id, template_file))
+#         with engine.begin() as conn:
+#             print(render.render_document(conn, artifact_doc_id, template_file))
             
         #create folder and add  depedencencies
         mavenDepUtil.getDepAndGenDocsForDeps()
@@ -358,15 +358,13 @@ def main(sysargv=None):
                 sys.stderr.write(fmt.format(package_path, doc_id))
             with engine.begin() as conn:
                 spdxdb.create_extern_document_reference(conn, artifact_doc_id,doc['document_namespace_id'],package['sha1'])
-                print(render.render_document(conn, doc_id, template_file))
+#                 print(render.render_document(conn, doc_id, template_file))
             #.call(...) is for blocking
 
-#         mavenDepUtil.createGraphMl()
-#         with engine.begin() as conn:
-#             spdxdb.persistDependencyHierarchy(conn)
-#         import queries
-#         with engine.begin() as conn:
-#             print(render.get_row(conn,queries.getPackageIdentifierByName("openssl-1.0.1r.tar.gz"))['left_identifier_id'])
+        mavenDepUtil.createGraphMl()
+        with engine.begin() as conn:
+            spdxdb.persistDependencyHierarchy(conn)
+            print(render.render_document(conn, artifact_doc_id, template_file))
     
 
     elif argv['generate']:

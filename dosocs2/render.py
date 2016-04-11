@@ -76,6 +76,15 @@ def render_document(conn, docid, template_file):
     package['annotations'] = get_rows(conn, queries.annotations(docid, package['id_string']))
     query = queries.relationships(document['document_namespace_id'], package['id_string'])
     package['relationships'] = get_rows(conn, query)
+    query = queries.depedendency_relationships(document['document_namespace_id'], package['id_string'])
+    package['relationships'].extend(get_rows(conn, query))
+    query=queries.doc_ids_of_external_doc_refs(docid)
+    extern_refs_docids=get_rows(conn,query)
+    for docids in extern_refs_docids:
+        external_ref_doc=get_row(conn,queries.documents(docids['document_id']))
+        external_ref_doc_package=get_row(conn,queries.documents_packages(docids['document_id']))
+        query = queries.depedendency_relationships(external_ref_doc['document_namespace_id'], external_ref_doc_package['id_string'])
+        package['relationships'].extend(get_rows(conn,query))
     package['files'] = get_rows(conn, queries.documents_files(docid, package['package_id']))
     for file in sorted(package['files']):
         file['license_info'] = get_rows(conn, queries.files_licenses(file['file_id']))
