@@ -79,7 +79,7 @@ The list is for the external references.
 !["DoSOCSv2 Schema"](https://raw.githubusercontent.com/JohnVCS/fossologyFunTime/master/SchemaAndDataFlowImages/SchemaDiagramDoSocs.png)
 !["DoSOCSv2 Schema Partial"](https://raw.githubusercontent.com/JohnVCS/fossologyFunTime/master/SchemaAndDataFlowImages/tablesUsed.png)
 
-We're using the same dosocs database schema.  The only tables our feature touches are documents,extern_refs, identifiers, relationships, relationship_types and packages.
+We're using the same dosocs database schema.  The main tables our feature touches are documents,extern_refs, identifiers, relationships, relationship_types and packages.
 
 
 
