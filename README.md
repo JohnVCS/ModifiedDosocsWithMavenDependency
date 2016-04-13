@@ -23,6 +23,10 @@ Language(s)
 Dependency
 * Maven 3.3.3 - https://gist.github.com/ervinb/34203f0cc54c1e7f982b (Link on how to install for ubuntu 14.04 - You also need to create a directory called .semaphore-cache)
 
+## Install Notes
+Run the same nomos install script if you don't have nomos installed.
+Do a pip install on a cloned version of this project not the tarball release from dosocs.
+
 ## Use Case
 ```
         title
