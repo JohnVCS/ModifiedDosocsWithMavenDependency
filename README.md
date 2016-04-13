@@ -82,6 +82,7 @@ The list is for the external references.
 We're using the same dosocs database schema.  The main tables our feature touches are documents,extern_refs, identifiers, relationships, relationship_types and packages.
 
 ## Test(s)
+1. We are testing createTempDirectoryIfDoesntExist(). The event is to create a temporary directory. In order to verify the result, our code checks wether the temporary directory exists or not. Furthermore, if the directory already exists, then it shouldn't throw an exception.
 
 ##Usage
 ```python
