@@ -70,29 +70,11 @@ The list is for the external references.
 !["DoSOCSv2 Schema Partial"](https://raw.githubusercontent.com/JohnVCS/fossologyFunTime/master/SchemaAndDataFlowImages/tablesUsed.png)
 
 
-## Dependencies
-DoSOCSv2 - https://github.com/DoSOCSv2/DoSOCSv2
-
-networkx
-
-
 
 ##Usage
 ```python
-usage: main.py [-h] [-db DATABASE] [-d DIRECTORY] [-u USERNAME] [-p PASSWORD]
-
-processes licenses and throws into DB
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -db DATABASE, --database DATABASE
-                        database name
-  -d DIRECTORY, --directory DIRECTORY
-                        directory path to package
-  -u USERNAME, --username USERNAME
-                        your username
-  -p PASSWORD, --password PASSWORD
-                        your password
+usage: dosoc2 mavenDepGen -a [ARITIFACT]
+  example:  dosoc2 mavenDepGen -a target/SpringMVCmongoDBTest-0.0.1-SNAPSHOT-sources.jar
 ```
 
 dosocs2 
