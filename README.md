@@ -36,6 +36,7 @@ Dependency
         preconditions
           Valid pom file and prebuilt artifact
           Proper connections with dosocs db and maven central
+          The artifact name should end in -sources.jar as well as the depedencies pulled down from maven central.
         success scenario
                 Depedency relationship information is persisted in the dosocs database.
                 Valid spdx document is printable.
