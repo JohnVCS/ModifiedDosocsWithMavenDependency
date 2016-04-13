@@ -79,8 +79,8 @@ The list is for the external references.
 
 ##Usage
 ```python
-usage: dosoc2 mavenDepGen -a [ARITIFACT]
-  example:  dosoc2 mavenDepGen -a target/SpringMVCmongoDBTest-0.0.1-SNAPSHOT-sources.jar
+usage: dosoc2 mavenDepGen (ARITIFACT)
+  example:  dosoc2 mavenDepGen target/SpringMVCmongoDBTest-0.0.1-SNAPSHOT-sources.jar
 ```
 
 dosocs2 
