@@ -1,3 +1,85 @@
+## System Description
+This is a forked version of dosocsv2 that contains a feature called mavenDepGen.  The mavenDepGen feature provides the ability to give dosocs a pom.xml file and it's associated artifact with source files and persist depedency relationship information in the relationships table accordingly.  
+
+The program works by doing a oneshot, excluding the print off of the document till the very end, scan on the artifact.  It then creates a temporary directory called mydep in the current working directory if it doesn't exist.  It copies all the transitive depedencies deligated by the pom.xml file into the my dep folder.  Once it's done doing this it will then create documents for all the depedencies in the mydep folder.  It will also generate external document references that refer to the project artifacts document and the various namespaces for the depedencies (These are needed to render out all the depedency relationships across different namespaces).  Following the document and external references creation for the depedencies,  then the feature will generate a graphml file in the current working directory.  This graphml file is a standard way to represent graphs.  The edges of the depedency graph are parsed out of the graphml file with networkx.  After the edges are parsed out,  the edges are converted from package names to package identifiers and persisted into the relationships table with the prerequisite_of relationhship.  Finally after all the documents, external references and relationships are persisted,  the program finally renders out the artifact document containing all the transitive depedencies in the package relationships section.
+
+### Atribution for implementation ideas
+Thomas T Gurney helped in the decision to use external document references to get depedency relationships across different namespaces. 
+
+## Development Environment
+OS 
+ * (John)   -  Ubuntu 14.04 
+ * (Jesse)  -  Ubuntu Gnome 15.10
+ 
+IDE
+* Eclipse/Pydev
+
+Language(s)
+* Python 2.7.x
+
+Dependency
+* Maven 3.3.3 - https://gist.github.com/ervinb/34203f0cc54c1e7f982b (Link on how to install for ubuntu 14.04 - You also need to create a directory called .semaphore-cache)
+
+## Use Case
+```
+        title
+                Developer submits pom.xml and artifact to generate spdx document that shows depdency relationships for legal and security purposes.
+        primary actor
+                external entity - developer
+        goal in context
+                Developer wants to generate spdx document with depedency information for legal and security purposes.
+        stakeholders and interests
+                decision maker/manager - want to see spdx information for legal and security purposes
+                lawyer/legal professionals -  want to see spdx information for legal and security purposes
+                spdx community - want to see spdx information for legal and security purposes
+                IT auditing companies -  want to see spdx information for legal and security purposes
+        preconditions
+          No previous scans have occrred - db is cleared
+          mydep directory starts empty or doesn't exist
+          Valid pom file and prebuilt artifact
+          Proper connections with dosocs db and maven central
+          The artifact name should end in -sources.jar as well as the depedencies pulled down from maven central.
+        success scenario
+                Depedency relationship information is persisted in the dosocs database.
+                Valid spdx document is printable.
+        failed end condition
+                can't connect to maven central
+                can't connect to dosocs
+                non-valid pom
+                non-valid artifact
+                  artifact/depedencies don't contain sources - this is needed for the license scanner
+        trigger
+                pom.xml/project artifact
+```
+
+## Communication Management Plan
+Your Team -
+Jesse and John communicate through phone/email and in person. We are both taking the same classes currently, and we schedule a face-to-face meeting at PKI every weekend. In addition, we are also using Github's issue tracker as another means of communication.
+
+* Your Community 
+  * irc
+    * freenode
+      * #spdx
+* DoSOCSv2
+  * Thomas T Gurney <ttg@tuta.io>  
+* SPDX
+
+## Data Flow Diagram of the System
+The list is for the external references.
+!["Data Flow Diagram"](https://raw.githubusercontent.com/JohnVCS/fossologyFunTime/master/SchemaAndDataFlowImages/Diagram2.png)
+
+## DoSOCSv2 Schema
+!["DoSOCSv2 Schema"](https://raw.githubusercontent.com/JohnVCS/fossologyFunTime/master/SchemaAndDataFlowImages/SchemaDiagramDoSocs.png)
+!["DoSOCSv2 Schema Partial"](https://raw.githubusercontent.com/JohnVCS/fossologyFunTime/master/SchemaAndDataFlowImages/tablesUsed.png)
+
+
+
+##Usage
+```python
+usage: dosoc2 mavenDepGen -a [ARITIFACT]
+  example:  dosoc2 mavenDepGen -a target/SpringMVCmongoDBTest-0.0.1-SNAPSHOT-sources.jar
+```
+
 dosocs2 
 =======
 
