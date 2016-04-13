@@ -34,6 +34,8 @@ Dependency
                 spdx community - want to see spdx information for legal and security purposes
                 IT auditing companies -  want to see spdx information for legal and security purposes
         preconditions
+          No previous scans have occrred - db is cleared
+          mydep directory starts empty or doesn't exist
           Valid pom file and prebuilt artifact
           Proper connections with dosocs db and maven central
           The artifact name should end in -sources.jar as well as the depedencies pulled down from maven central.
