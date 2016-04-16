@@ -85,6 +85,7 @@ We're using the same dosocs database schema.  The main tables our feature touche
 
 ## Test(s)
 1. We are testing createTempDirectoryIfDoesntExist(). The event is to create a temporary directory. In order to verify the result, our code checks wether the temporary directory exists or not. Furthermore, if the directory already exists, then it shouldn't throw an exception.
+2. We are testing parseGraphMl() function. The event is to parse the graphml file that was created. To verify that the graphml file is parsed, the test will return the parent-child relationship in a pair structure, similar to a tuple.
 
 ##Usage
 ```python
