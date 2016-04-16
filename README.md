@@ -90,6 +90,14 @@ We're using the same dosocs database schema.  The main tables our feature touche
 
 3. We are testing parseGraphMl() function. The event is to parse the graphml file that was created. To verify that the graphml file is parsed, the test will return the parent-child relationship in a pair structure, similar to a tuple.
 
+| number | Testing | Event | Verify |
+|--------|---------|-------|--------|
+| 1      |         |       |        |
+| 2      |         |       |        |
+| 3      |         |       |        |
+| 4      |         |       |        |
+| 5      |         |       |        |
+
 ##Usage
 ```python
 usage: dosoc2 mavenDepGen (ARITIFACT)
