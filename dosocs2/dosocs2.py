@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-# Copyright (C) 2015 University of Nebraska at Omaha
+# Copyright (C) 2016 University of Nebraska at Omaha
 #
 # This file is part of dosocs2.
 #
