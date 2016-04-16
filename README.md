@@ -84,20 +84,13 @@ The list is for the external references.
 We're using the same dosocs database schema.  The main tables our feature touches are documents,extern_refs, identifiers, relationships, relationship_types and packages.
 
 ## Test(s)
-1. Can you determine if the Maven connection is working? Could you write code to determine this for you? Unit Test. ---> We can write a test that returns a valid graphml file using the dependency:tree. If it returns a valid test.graphml file or if mvn copy:dependencies pulls down the dependencies, then it successfully hits maven central, which means that our maven connection is working.
-
-2. We are testing createTempDirectoryIfDoesntExist(). The event is to create a temporary directory. In order to verify the result, our code checks wether the temporary directory exists or not. Furthermore, if the directory already exists, then it shouldn't throw an exception.
-
-3. We are testing parseGraphMl() function. The event is to parse the graphml file that was created. To verify that the graphml file is parsed, the test will return the parent-child relationship in a pair structure, similar to a tuple.
-
-| number | Testing | Event | Verify |
-|--------|---------|-------|--------|
-| 1      |         |       |        |
-| 2      |         |       |        |
-| 3      |         |       |        |
-| 4      |         |       |        |
-| 5      |         |       |        |
-
+| number | Testing                                                                                                               | Event                              | Verify                                                                                                                                                                                                                                           |
+|--------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1      | Is the Maven Connection Working?                                                                                      | copyDepCmd or createGraphMlCommand | We can write a test that returns a dependency:tree. If it returns a valid test.graphml file or if maven copy:dependencies pulls down the dependencies, then it sucessfully hits maven central, which means that our maven connection is working. |
+| 2      | Are the package(s) being scanned going into DoSOCS DB?                                                                | mavenDepGen                        | We can write a test that queries the packages table for the name of the package, and if it yields a record, then it is successfully stored in the DoSOCS database.                                                                               |
+| 3      | Are relationships being updated?                                                                                      | persistDependencyHierarchy         | We can query the relationships table where the relationship id is 29, and check whether the number of records is the same as the number of edges in the graphml file.                                                                            |
+| 4      | We can test whether we are rendering the HAS_PREREQUISITE relationship across different document namespaces.          | render_document                    | We can grep - prints lines that contain a match for a pattern - the document artifact output for HAS_PREREQUISITE and make sure it contains the same amount of lines as there are edges.                                                         |
+| 5      | Check to see if a temporary directory exists, and also check if it creates a temporary directory if it doesn't exist. | createTempDirectoryIfDoesntExist   | In order to verify, we can use os.path.exist or os.path.isdir to verify the mydep directory is in the current working directory if it doesn't exist, and if it already exists, then it shouldn't throw an exception.                             |
 ##Usage
 ```python
 usage: dosoc2 mavenDepGen (ARITIFACT)
