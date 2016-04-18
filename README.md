@@ -39,6 +39,14 @@ The following command must output a valid graphml file.  Graphml should show up 
 mvn dependency:tree -DoutputFile=test.graphml -DoutputType=graphml
 ```
 
+## John Maven Config
+Apache Maven 3.3.3 (7994120775791599e205a5524ec3e0dfe41d4a06; 2015-04-22T06:57:37-05:00)
+Maven home: /usr/local/apache-maven-3.3.3
+Java version: 1.7.0_72, vendor: Oracle Corporation
+Java home: /usr/lib/jvm/java-7-oracle/jre
+Default locale: en_CA, platform encoding: UTF-8
+OS name: "linux", version: "3.13.0-44-generic", arch: "amd64", family: "unix"
+
 ## Install Notes
 Run the same nomos install script if you don't have nomos installed.
 Do a pip install on a cloned version of this project not the tarball release from dosocs.
