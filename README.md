@@ -2,9 +2,11 @@ DoSocsv2 Maven Dependency Document Generate Feature
 =======
 
 ## System Description
-This is a forked version of dosocsv2 that contains a feature called mavenDepGen.  The mavenDepGen feature provides the ability to give dosocs a pom.xml file and it's associated artifact with source files and persist depedency relationship information in the relationships table accordingly.  
+This is a forked version of dosocsv2 that contains a feature called mavenDepGen. The mavenDepGen feature provides the ability to give dosocs a pom.xml file and its associated artifact with source files and persist dependency relationship information in the relationships table accordingly.
 
-The program works by doing a oneshot, excluding the print off of the document till the very end, scan on the artifact.  It then creates a temporary directory called mydep in the current working directory if it doesn't exist.  It copies all the transitive depedencies deligated by the pom.xml file into the my dep folder.  Once it's done doing this it will then create documents for all the depedencies in the mydep folder.  It will also generate external document references that refer to the project artifacts document and the various namespaces for the depedencies (These are needed to render out all the depedency relationships across different namespaces).  Following the document and external references creation for the depedencies,  then the feature will generate a graphml file in the current working directory.  This graphml file is a standard way to represent graphs.  The edges of the depedency graph are parsed out of the graphml file with networkx.  After the edges are parsed out,  the edges are converted from package names to package identifiers and persisted into the relationships table with the prerequisite_of relationhship.  Finally after all the documents, external references and relationships are persisted,  the program finally renders out the artifact document containing all the transitive depedencies in the package relationships section.
+The program works by doing a oneshot, excluding the print off of the document till the very end, scan on the artifact. It then creates a temporary directory called mydep in the current working directory if it doesn't exist. It then copies all the transitive dependencies delegated by the pom.xml file into the mydep folder. Once it's done doing this, it will then create documents for all the dependencies in the mydep folder. It will also generate external document references that refer to the project artifacts document and the various namespaces for the dependencies (These are needed to render out all the dependency relationships across different namespaces). Following the document and external references creation for the dependencies, then the feature will generate a graphml file in the current working directory. This graphml file is a standard way to represent graphs. The edges of the dependency graph are parsed out of the graphml file with networkx. After the edges are parsed out, the edges are converted from package names to package identifiers and persisted into the relationships table with the HAS_PREREQUISITE relationship. Finally after all the documents, external references and relationships are persisted, the program finally renders out the artifact document containing all the transitive dependencies in the package relationships section.
+
+
 
 ### Atribution for implementation ideas
 Thomas T Gurney helped in the decision to use external document references to get depedency relationships across different namespaces. 
@@ -22,6 +24,32 @@ Language(s)
 
 Dependency
 * Maven 3.3.3 - https://gist.github.com/ervinb/34203f0cc54c1e7f982b (Link on how to install for ubuntu 14.04 - You also need to create a directory called .semaphore-cache)
+
+## Jesse's maven config
+
+Apache Maven 3.3.3
+Maven home: /usr/share/maven
+Java version: 1.8.0_31, vendor: Oracle Corporation
+Java home: /opt/jdk1.8.0_31/jre
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "4.2.0-16-generic", arch: "amd64", family: "unix"
+
+The following command must output a valid graphml file.  Graphml should show up as xml,  if not you should look into your maven config. 
+```bash
+mvn dependency:tree -DoutputFile=test.graphml -DoutputType=graphml
+```
+
+## John Maven Config
+Apache Maven 3.3.3 (7994120775791599e205a5524ec3e0dfe41d4a06; 2015-04-22T06:57:37-05:00)
+Maven home: /usr/local/apache-maven-3.3.3
+Java version: 1.7.0_72, vendor: Oracle Corporation
+Java home: /usr/lib/jvm/java-7-oracle/jre
+Default locale: en_CA, platform encoding: UTF-8
+OS name: "linux", version: "3.13.0-44-generic", arch: "amd64", family: "unix"
+
+## Install Notes
+Run the same nomos install script if you don't have nomos installed.
+Do a pip install on a cloned version of this project not the tarball release from dosocs.
 
 ## Use Case
 ```
@@ -75,12 +103,20 @@ The list is for the external references.
 !["DoSOCSv2 Schema"](https://raw.githubusercontent.com/JohnVCS/fossologyFunTime/master/SchemaAndDataFlowImages/SchemaDiagramDoSocs.png)
 !["DoSOCSv2 Schema Partial"](https://raw.githubusercontent.com/JohnVCS/fossologyFunTime/master/SchemaAndDataFlowImages/tablesUsed.png)
 
+We're using the same dosocs database schema.  The main tables our feature touches are documents,extern_refs, identifiers, relationships, relationship_types and packages.
 
-
+## Test(s)
+| number | Testing                                                                                                               | Event                              | Verify                                                                                                                                                                                                                                           |
+|--------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1      | Is the Maven Connection Working?                                                                                      | copyDepCmd or createGraphMlCommand | We can write a test that returns a dependency:tree. If it returns a valid test.graphml file or if maven copy:dependencies pulls down the dependencies, then it sucessfully hits maven central, which means that our maven connection is working. |
+| 2      | Are the package(s) being scanned going into DoSOCS DB?                                                                | mavenDepGen                        | We can write a test that queries the packages table for the name of the package, and if it yields a record, then it is successfully stored in the DoSOCS database.                                                                               |
+| 3      | Are relationships being updated?                                                                                      | persistDependencyHierarchy         | We can query the relationships table where the relationship id is 29, and check whether the number of records is the same as the number of edges in the graphml file.                                                                            |
+| 4      | We can test whether we are rendering the HAS_PREREQUISITE relationship across different document namespaces.          | render_document                    | We can grep - prints lines that contain a match for a pattern - the document artifact output for HAS_PREREQUISITE and make sure it contains the same amount of lines as there are edges.                                                         |
+| 5      | Check to see if a temporary directory exists, and also check if it creates a temporary directory if it doesn't exist. | createTempDirectoryIfDoesntExist   | In order to verify, we can use os.path.exist or os.path.isdir to verify the mydep directory is in the current working directory if it doesn't exist, and if it already exists, then it shouldn't throw an exception.                             |
 ##Usage
 ```python
-usage: dosoc2 mavenDepGen -a [ARITIFACT]
-  example:  dosoc2 mavenDepGen -a target/SpringMVCmongoDBTest-0.0.1-SNAPSHOT-sources.jar
+usage: dosoc2 mavenDepGen (ARITIFACT)
+  example:  dosoc2 mavenDepGen target/SpringMVCmongoDBTest-0.0.1-SNAPSHOT-sources.jar
 ```
 
 dosocs2 
@@ -124,7 +160,7 @@ changes until a 1.x.x release!
 License and Copyright
 ---------------------
 
-Copyright © 2015 University of Nebraska at Omaha
+Copyright © 2016 University of Nebraska at Omaha
 
 dosocs2 is free software: you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
