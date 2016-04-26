@@ -26,7 +26,7 @@
 {0} newconfig [-f FILE]
 {0} oneshot [-c COMMENT] [-C COMMENT] [-e VER] [-f FILE] [-n NAME] [-N NAME]
     [-r] [-s SCANNERS] [-T FILE] (PATH)
-{0} mavenDepGen (ARTIFACT) 
+{0} mavenDepGen (ARTIFACT) (POM-PATH) 
 {0} print [-f FILE] [-T FILE] (DOC-ID)
 {0} scan [-c COMMENT] [-f FILE] [-n NAME] [-e VER] [-s SCANNERS] [-r] (PATH)
 {0} scanproject [--project-file] (PROJECT-FILE)
@@ -195,8 +195,9 @@ def main(sysargv=None):
     new_doc_name = argv['--doc-name'] or argv['--package-name']
     template_file = argv['--template-file'] or format_map['tag']
     project_file = argv['PROJECT-FILE'] or ''
-    artifact = argv['ARTIFACT']
-
+    artifact = argv['ARTIFACT'] 
+    pom_path = argv['POM-PATH']
+	
     # Configuration and scanner discovery
     config = configtools.Config()
     config.make_config_dirs()
