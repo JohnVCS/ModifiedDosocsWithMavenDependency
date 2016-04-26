@@ -85,7 +85,7 @@ Do a pip install on a cloned version of this project not the tarball release fro
 
 ## Communication Management Plan
 Your Team -
-Jesse and John communicate through phone/email and in person. We are both taking the same classes currently, and we schedule a face-to-face meeting at PKI every weekend. In addition, we are also using Github's issue tracker as another means of communication.
+Jesse and John communicate through phone/email and in person. We are both taking the same classes currently, and we schedule a face-to-face meeting at PKI every weekend. In addition, our team is utilizing Google-docs to brainstorm ideas on how to approach the problem and implement a solution. Finally, we are using Github's issue tracker as another means of communication.
 
 * Your Community 
   * irc
