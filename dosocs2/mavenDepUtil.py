@@ -27,9 +27,11 @@ devnull=open('/dev/null','w')
 
 # creates the temporary directory to store the jar files
 def createTempDirectoryIfDoesntExist():
+	import shutil
 	newpath = r'/tmp/mydep' 
-	if not os.path.exists(newpath):
-    		os.makedirs(newpath)
+	if os.path.exists(newpath):
+		shutil.rmtree(newpath)
+	os.makedirs(newpath)
 
 # copies depedencies to folder 
 def copyDependencyToTempFolder(pom_path):
