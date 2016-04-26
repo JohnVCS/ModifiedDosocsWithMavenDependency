@@ -1,3 +1,4 @@
+#awesome test
 def test_createTempDirectoryIfDoesntExist():
     from dosocs2 import mavenDepUtil
     import os
