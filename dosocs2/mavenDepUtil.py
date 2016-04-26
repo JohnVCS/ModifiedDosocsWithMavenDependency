@@ -27,19 +27,20 @@ devnull=open('/dev/null','w')
 
 # creates the temporary directory to store the jar files
 def createTempDirectoryIfDoesntExist():
-	newpath = r'mydep' 
+	newpath = r'/tmp/mydep' 
 	if not os.path.exists(newpath):
     		os.makedirs(newpath)
 
 # copies depedencies to folder 
-def copyDependencyToTempFolder():
-	copyDepCmd=["mvn","dependency:copy-dependencies","-DoutputDirectory=mydep","-Dclassifier=sources"]
+def copyDependencyToTempFolder(pom_path):
+	copyDepCmd=["mvn","-f",pom_path,"dependency:copy-dependencies","-DoutputDirectory=/tmp/mydep","-Dclassifier=sources"]
+	print copyDepCmd
 	copyDepMvnPluginProcess=subprocess.call(copyDepCmd, stdout=devnull)
 
 # creates the graphML
 # graphML is one of the supported output type format of Maven
-def createGraphMl():
-	createGraphMlCommand = ["mvn", "dependency:tree","-DoutputFile=test.graphml", "-DoutputType=graphml"]
+def createGraphMl(pom_path):
+	createGraphMlCommand = ["mvn","-f",pom_path,"dependency:tree","-DoutputFile=/tmp/test.graphml", "-DoutputType=graphml"]
 	#.call(...) is for blocking
 	createGraphMlMvnPluginProcess = subprocess.call(createGraphMlCommand, stdout=devnull)
 
@@ -49,9 +50,7 @@ def parseGraphMl():
 	import networkx
 	import os.path
 	import time
-	
-	# graph is an oject imported by networkx
-	graph=networkx.read_graphml("test.graphml")
+	graph=networkx.read_graphml("/tmp/test.graphml")
 	
 	# optional argument data="NodeLabel" since that is what we need
 	# nodes grabs all the nodes and nodelabel, and then returns a set of tuples
@@ -70,7 +69,7 @@ def createDocumentForArtifact(artifact):
 	dosocsOneshotProcess = subprocess.call(dosocsOneshotCommand)#, stdout=devnull)
 
 def createDocumentsForDepedencies():
-	for filename in os.listdir('mydep'):
+	for filename in os.listdir('/tmp/mydep'):
 		dosocsOneshotCommand = ["dosocs2", "oneshot","mydep/"+filename]
 		#.call(...) is for blocking
 		dosocsOneshotProcess = subprocess.call(dosocsOneshotCommand)#, stdout=devnull)
@@ -79,9 +78,9 @@ def createDocumentsForDepedencies():
 # 		return end_of_pipe 
 
 
-def getDepAndGenDocsForDeps():
+def getDepAndGenDocsForDeps(pom_path):
 	createTempDirectoryIfDoesntExist()
-	copyDependencyToTempFolder()
+	copyDependencyToTempFolder(pom_path)
 # 	createDocumentsForDepedencies()
 
 

@@ -318,11 +318,11 @@ def main(sysargv=None):
 #             print(render.render_document(conn, artifact_doc_id, template_file))
             
         #create folder and add  depedencencies
-        mavenDepUtil.getDepAndGenDocsForDeps()
+        mavenDepUtil.getDepAndGenDocsForDeps(pom_path)
 
         #traverse depedencencies and generate documents
-        for filename in os.listdir('mydep'):
-            package_path="mydep/"+filename
+        for filename in os.listdir('/tmp/mydep'):
+            package_path="/tmp/mydep/"+filename
             kwargs = {
                 'config': config.config,
                 'engine': engine,
@@ -361,7 +361,7 @@ def main(sysargv=None):
 #                 print(render.render_document(conn, doc_id, template_file))
             #.call(...) is for blocking
 
-        mavenDepUtil.createGraphMl()
+        mavenDepUtil.createGraphMl(pom_path)
         with engine.begin() as conn:
             spdxdb.persistDependencyHierarchy(conn)
             print(render.render_document(conn, artifact_doc_id, template_file))
