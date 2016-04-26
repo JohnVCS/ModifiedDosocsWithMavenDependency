@@ -48,7 +48,7 @@ Default locale: en_CA, platform encoding: UTF-8
 OS name: "linux", version: "3.13.0-44-generic", arch: "amd64", family: "unix"
 
 ## Install Notes
-Run the same nomos install script if you don't have nomos installed.
+Run the same DoSOCSv2 nomos install script if you don't have nomos installed.
 Do a pip install on a cloned version of this project not the tarball release from dosocs.
 
 ## Use Case
