@@ -97,7 +97,7 @@ Jesse and John communicate through phone/email and in person. We are both taking
 
 ## Data Flow Diagram of the System
 The list is for the external references.
-!["Data Flow Diagram"](https://raw.githubusercontent.com/JohnVCS/fossologyFunTime/master/SchemaAndDataFlowImages/Diagram2.png)
+!["Data Flow Diagram"](https://raw.githubusercontent.com/JohnVCS/fossologyFunTime/master/SchemaAndDataFlowImages/Diagram.jpg)
 
 ## DoSOCSv2 Schema
 !["DoSOCSv2 Schema"](https://raw.githubusercontent.com/JohnVCS/fossologyFunTime/master/SchemaAndDataFlowImages/SchemaDiagramDoSocs.png)
