@@ -65,19 +65,20 @@ Do a pip install on a cloned version of this project not the tarball release fro
                 spdx community - want to see spdx information for legal and security purposes
                 IT auditing companies -  want to see spdx information for legal and security purposes
         preconditions
-          No previous scans have occrred - db is cleared
-          mydep directory starts empty or doesn't exist
-          Valid pom file and prebuilt artifact
-          Proper connections with dosocs db and maven central
+          No previous scans have occrred - db is cleared.
+          Dependencies have to be in MAVEN Central.
+          Maven must be able to use the dependency:tree plug-in to produce a valid graphml file.
+          Valid pom file and prebuilt artifact.
+          Proper connections with dosocs db and maven central.
           The artifact name should end in -sources.jar as well as the depedencies pulled down from maven central.
         success scenario
                 Depedency relationship information is persisted in the dosocs database.
                 Valid spdx document is printable.
         failed end condition
-                can't connect to maven central
-                can't connect to dosocs
-                non-valid pom
-                non-valid artifact
+                can't connect to maven central.
+                can't connect to dosocs.
+                non-valid pom.
+                non-valid artifact.
                   artifact/depedencies don't contain sources - this is needed for the license scanner
         trigger
                 pom.xml/project artifact
