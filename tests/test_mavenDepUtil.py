@@ -6,7 +6,7 @@ def test_directory_get_created_in_tmp_createTempDirectoryIfDoesntExist():
     mavenDepUtil.createTempDirectoryIfDoesntExist()
     assert os.path.exists(r'/tmp/mydep')
 
-def test_directory_get_created_in_tmp_createTempDirectoryIfDoesntExist():
+def test_directory_deletes_contents_in_tmp_mydep_createTempDirectoryIfDoesntExist():
     #create mydep directory
     mavenDepUtil.createTempDirectoryIfDoesntExist()
     
