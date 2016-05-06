@@ -117,7 +117,7 @@ We're using the same dosocs database schema.  The main tables our feature touche
 ##Usage
 ```python
 usage: dosoc2 mavenDepGen (ARITIFACT)
-  example:  dosoc2 mavenDepGen target/SpringMVCmongoDBTest-0.0.1-SNAPSHOT-sources.jar
+  example:  dosoc2 mavenDepGen target/SpringMVCmongoDBTest-0.0.1-SNAPSHOT-sources.jar pompath/pom.xml
 ```
 
 dosocs2 
