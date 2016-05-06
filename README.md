@@ -116,7 +116,7 @@ We're using the same dosocs database schema.  The main tables our feature touche
 | 5      | Check to see if a temporary directory exists, and also check if it creates a temporary directory if it doesn't exist. | createTempDirectoryIfDoesntExist   | In order to verify, we can use os.path.exist or os.path.isdir to verify the mydep directory is in the current working directory if it doesn't exist, and if it already exists, then it shouldn't throw an exception.                             |
 ##Usage
 ```python
-usage: dosoc2 mavenDepGen (ARITIFACT)
+usage: dosoc2 mavenDepGen (ARITIFACT) (POM)
   example:  dosoc2 mavenDepGen target/SpringMVCmongoDBTest-0.0.1-SNAPSHOT-sources.jar pompath/pom.xml
 ```
 
